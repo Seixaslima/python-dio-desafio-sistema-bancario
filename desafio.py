@@ -4,6 +4,9 @@ def menu():
     [d] Depositar
     [s] Sacar
     [e] Extrato
+    [nu] Novo Usuario
+    [nc] Nova Conta
+    [lc] Listar Contas
     [q] Sair
 
     => """
@@ -58,6 +61,43 @@ def exibir_extrato(saldo, / , * , extrato ):
     print(f"Saldo: R$ {saldo:.2f}")
     print("==========================================")
 
+def criar_usuario(usuarios):
+    cpf = input("Informe o CPF (somente número): ")
+    usuario = buscar_usuario(cpf, usuarios)
+    if usuario:
+        print("Usuario ja está cadastrado")
+        return
+    
+    nome = input("Informe o nome completo: ")
+    data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
+    endereco = input("Informe o endereço (logradouro, nro - bairro - cidade/sigla estado): ")
+    usuarios.append({"cpf":cpf, "nome":nome, "data_nascimento":data_nascimento, "endereco":endereco})
+    print("Usuario criado com sucesso")
+
+def buscar_usuario(cpf, usuarios):
+    for usuario in usuarios: 
+        if usuario["cpf"] == cpf:
+            return usuario
+
+def criar_conta(contas, usuarios):
+    agencia = "0001"
+    numero = len(contas) + 1
+    cpf = input("Informe o cpf do titular da conta")
+    usuario = buscar_usuario(cpf, usuarios)
+
+    if usuario:
+        contas.append({"agencia":agencia, "numero":numero, "usuario":usuario})
+        print("Conta criada com sucesso")
+    else:
+        print("Usuario não encontrado")
+        print("Não foi possivel criar a conta")
+
+def listar_contas(contas):
+    if len(contas) > 0:
+        for conta in contas:
+            print(f'Agencia: {conta["agencia"]}, Número: {conta["numero"]}, Titular: {conta["usuario"]["nome"]}')
+    else:
+        print("Nenhuma conta cadastrada")
 
 
 def main():
@@ -68,6 +108,9 @@ def main():
     numero_saques = 0
     LIMITE_SAQUES = 3
     extrato_modificado = False
+
+    usuarios = []
+    contas = []
 
     while True:
 
@@ -96,6 +139,15 @@ def main():
         elif opcao == "e":
             exibir_extrato(saldo, extrato=extrato)
             extrato_modificado = False
+
+        elif opcao == "nu":
+            criar_usuario(usuarios)
+        
+        elif opcao == "nc":
+            criar_conta(contas, usuarios)
+
+        elif opcao == "lc":
+            listar_contas(contas)
 
         elif opcao == "q":
             if extrato_modificado:
