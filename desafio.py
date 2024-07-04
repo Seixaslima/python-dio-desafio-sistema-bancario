@@ -52,56 +52,58 @@ def depositar(saldo, valor, extrato, /):
 
     return saldo, extrato, sucesso
 
+def exibir_extrato(saldo, / , * , extrato ):
+    print("\n================ EXTRATO ================")
+    print("Não foram realizadas movimentações." if not extrato else extrato)
+    print(f"Saldo: R$ {saldo:.2f}")
+    print("==========================================")
 
 
 
-saldo = 0
-limite = 500
-extrato = ""
-numero_saques = 0
-LIMITE_SAQUES = 3
-extrato_modificado = False
+def main():
 
-while True:
+    saldo = 0
+    limite = 500
+    extrato = ""
+    numero_saques = 0
+    LIMITE_SAQUES = 3
+    extrato_modificado = False
 
-    opcao = input(menu())
+    while True:
 
-    if opcao == "d":
-        valor = float(input("Informe o valor do depósito: "))
-        saldo, extrato, sucesso = depositar(saldo, valor, extrato)
-        if sucesso:
-            extrato_modificado = True
+        opcao = input(menu())
 
-    elif opcao == "s":
-        valor = float(input("Informe o valor do saque: "))
+        if opcao == "d":
+            valor = float(input("Informe o valor do depósito: "))
+            saldo, extrato, sucesso = depositar(saldo, valor, extrato)
+            if sucesso:
+                extrato_modificado = True
 
-        saldo, extrato, sucesso = sacar(
-            saldo=saldo,
-            valor=valor,
-            extrato=extrato,
-            limite=limite,
-            limite_saques=LIMITE_SAQUES,
-            numero_saques=numero_saques
-        )
-        if sucesso:
-            extrato_modificado = True
-            
-    elif opcao == "e":
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"Saldo: R$ {saldo:.2f}")
-        print("==========================================")
-        extrato_modificado = False
+        elif opcao == "s":
+            valor = float(input("Informe o valor do saque: "))
 
-    elif opcao == "q":
-        if extrato_modificado:
-          print("\n================ EXTRATO ================")
-          print("Não foram realizadas movimentações." if not extrato else extrato)
-          print(f"Saldo: R$ {saldo:.2f}")
-          print("==========================================")
-        print("Obrigado, volte sempre!")
-        break
+            saldo, extrato, sucesso = sacar(
+                saldo=saldo,
+                valor=valor,
+                extrato=extrato,
+                limite=limite,
+                limite_saques=LIMITE_SAQUES,
+                numero_saques=numero_saques
+            )
+            if sucesso:
+                extrato_modificado = True
+                
+        elif opcao == "e":
+            exibir_extrato(saldo, extrato=extrato)
+            extrato_modificado = False
 
-    else:
-        print("Operação inválida, por favor selecione novamente a operação desejada.")
+        elif opcao == "q":
+            if extrato_modificado:
+                exibir_extrato(saldo, extrato=extrato)
+            print("Obrigado, volte sempre!")
+            break
 
+        else:
+            print("Operação inválida, por favor selecione novamente a operação desejada.")
+
+main()
