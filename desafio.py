@@ -68,7 +68,7 @@ while True:
 
     if opcao == "d":
         valor = float(input("Informe o valor do depósito: "))
-        saldo, valor, sucesso = depositar(saldo, valor, extrato)
+        saldo, extrato, sucesso = depositar(saldo, valor, extrato)
         if sucesso:
             extrato_modificado = True
 
