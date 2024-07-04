@@ -38,6 +38,19 @@ def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
     
     return saldo, extrato, sucesso
 
+def depositar(saldo, valor, extrato, /):
+    sucesso = False
+
+    if valor > 0:
+        saldo += valor
+        extrato += f"Depósito: R$ {valor:.2f}\n"
+        sucesso = True
+        print("Deposito realizado com sucesso")
+
+    else:
+        print("Operação falhou! O valor informado é inválido.")
+
+    return saldo, extrato, sucesso
 
 
 
@@ -55,14 +68,9 @@ while True:
 
     if opcao == "d":
         valor = float(input("Informe o valor do depósito: "))
-
-        if valor > 0:
-            saldo += valor
-            extrato += f"Depósito: R$ {valor:.2f}\n"
+        saldo, valor, sucesso = depositar(saldo, valor, extrato)
+        if sucesso:
             extrato_modificado = True
-
-        else:
-            print("Operação falhou! O valor informado é inválido.")
 
     elif opcao == "s":
         valor = float(input("Informe o valor do saque: "))
