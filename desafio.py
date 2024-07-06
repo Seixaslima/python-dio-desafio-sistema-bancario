@@ -1,3 +1,100 @@
+from abc import ABC,abstractmethod
+
+class cliente:
+    def __init__(self, endereco):
+        self.endereco = endereco
+        self.contas = []
+
+    def realizar_transacao(self):
+        pass
+
+    def adicionar_conta(self):
+        pass
+
+class pessoa_fisica(cliente):
+    def __init__(self, endereco, cpf, nome, data_nascimento):
+        super().__init__(endereco)
+        self.cpf = cpf
+        self.nome = nome
+        self.data_nascimento = data_nascimento
+
+class conta:
+    def __init__(self,saldo,numero,agencia,cliente):
+        self._saldo = saldo
+        self._numero = numero
+        self._agencia = agencia
+        self._cliente = cliente
+        self._historico = historico()
+    
+    @property
+    def saldo(self):
+        return self._saldo
+
+    @property
+    def numero(self):
+        return self._numero
+
+    @property
+    def agencia(self):
+        return self._agencia
+
+    @property
+    def cliente(self):
+        return self._cliente
+    
+    @property
+    def historico(self):
+        return self._historico
+
+class conta_corrente(conta):
+    def __init__(self, saldo, numero, agencia, cliente, limite, limite_saque):
+        super().__init__(saldo, numero, agencia, cliente)
+        self._limite = limite
+        self._limite_saque = limite_saque
+
+    
+class transacao(ABC):
+    @property
+    def valor(self):
+        pass
+
+    @abstractmethod
+    def registrar(cls,conta):
+        pass
+
+class deposito(transacao):
+    def __init__(self,valor):
+        self._valor = valor
+    
+    @property
+    def valor(self):
+        return self._valor
+    
+
+    def registrar(self, conta):
+        pass
+        
+    
+class saque(transacao):
+    def __init__(self,valor):
+        self._valor = valor
+    
+    @property
+    def valor(self):
+        return self._valor
+    
+    def registrar(self, conta):
+        pass
+
+
+class historico:
+    def __init__(self) -> None:
+        self._transacoes =  []
+    
+    def adicionar_transacao(self,transacao):
+        self._transacoes.append(transacao)
+
+
 def menu():
     menu = """
 
@@ -12,7 +109,6 @@ def menu():
     => """
 
     return menu
-
 
 def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
     sucesso = False
