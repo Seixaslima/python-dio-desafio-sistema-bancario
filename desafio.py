@@ -276,6 +276,34 @@ def criar_conta(clientes:list[pessoa_fisica], contas:list[Conta]):
     else:
         print("Cliente não encontrado")
     
+def mostrar_extrato(clientes:list[pessoa_fisica]):
+    cpf = input("Digite o CPF do cliente: ")
+    cliente = encontrar_cliente(cpf, clientes)
+
+    if cliente:
+        contas = cliente.contas
+        if not(contas):
+            print("O cliente não possui nenhuma conta cadastrada, cadastre uma conta primeiro")
+            return
+        
+        print(mostrar_contas(contas))
+        numero = input("Informe o numero da conta para extrato: ")
+        conta = encontrar_conta(numero, contas)
+        if conta:
+            historico = conta.historico.transacoes
+            if historico:
+                print("Tipo:        Valor:              Data:")
+                for transacao in historico:
+                    print(f"{transacao['tipo']}       {transacao['valor']}              {transacao['data']}")
+            else:
+                print("nenhuma transação realizada")
+
+        else:
+            print("Conta não encontrada")
+            return
+    else:
+        print("cliente não encontrado")
+        return
 
 
 def main():
@@ -293,7 +321,7 @@ def main():
             sacar(clientes)
 
         elif opcao == "e": # [e] Extrato
-            pass
+            mostrar_extrato(clientes)
 
         elif opcao == "ncl": # [ncl] Novo Cliente
             registrar_cliente(clientes)
@@ -302,7 +330,10 @@ def main():
             criar_conta(clientes,contas)
 
         elif opcao == "lc": # [lc] Listar Contas
-            pass
+            if len (contas) > 0:
+                print(mostrar_contas(contas))
+            else:
+                print("nenhuma conta registrada")
 
         elif opcao == "q": # [q] Sair
             return
